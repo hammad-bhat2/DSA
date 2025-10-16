@@ -1,0 +1,75 @@
+class Node:
+    def __init__(self, key):
+        self.key = key
+        self.left = None
+        self.right = None
+
+# Insert a key into the BST
+def insert(root, key):
+    if root is None:
+        return Node(key)
+    if key < root.key:
+        root.left = insert(root.left, key)
+    elif key > root.key:
+        root.right = insert(root.right, key)
+    return root
+
+# Delete a key from the BST
+def delete(root, key):
+    if root is None:
+        return root
+
+    if key < root.key:
+        root.left = delete(root.left, key)
+    elif key > root.key:
+        root.right = delete(root.right, key)
+    else:
+        # Node with only one child or no child
+        if root.left is None:
+            return root.right
+        elif root.right is None:
+            return root.left
+
+        # Node with two children: find inorder successor
+        min_val = find_min(root.right)
+        root.key = min_val
+        root.right = delete(root.right, min_val)
+
+    return root
+
+# Find the smallest key in a subtree
+def find_min(node):
+    current = node
+    while current.left:
+        current = current.left
+    return current.key
+
+# Print the BST in sorted (inorder) order
+def inorder(root):
+    if root:
+        inorder(root.left)
+        print(root.key, end=' ')
+        inorder(root.right)
+
+# Demo
+if __name__ == "__main__":
+    root = None
+    values = [50, 30, 20, 40, 70, 60, 80]
+
+    for val in values:
+        root = insert(root, val)
+
+    print("Inorder traversal after insertion:")
+    inorder(root)
+
+    print("\n\nDeleting 20:")
+    root = delete(root, 20)
+    inorder(root)
+
+    print("\n\nDeleting 30:")
+    root = delete(root, 30)
+    inorder(root)
+
+    print("\n\nDeleting 50:")
+    root = delete(root, 50)
+    inorder(root)

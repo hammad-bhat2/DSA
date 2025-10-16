@@ -1,0 +1,27 @@
+#include <stdio.h>  
+#include <stdlib.h>  
+#include <string.h> 
+#define SIZE 7 #define MAX_LEN 100 
+typedef struct { char *dayName; int date; char *activity; } Day; 
+Day* create(); void read(Day *calendar); void display(Day *calendar); void freeMemory(Day *calendar); 
+Day* create() { Day *calendar = (Day *)malloc(SIZE * sizeof(Day)); if (calendar == NULL) 
+{ printf("Memory allocation failed for calendar.\n"); exit(1); } return calendar; } void read(Day *calendar) { char buffer[MAX_LEN]; for (int i = 0; i < SIZE; i++) {     printf("\nEnter details for day %d:\n", i + 1); 
+ 
+    printf("Enter day name: ");     scanf(" %[^\n]", buffer);     calendar[i].dayName = (char *)malloc(strlen(buffer) + 1);     strcpy(calendar[i].dayName, buffer); 
+ 
+    printf("Enter date (as integer): "); 
+    scanf("%d", &calendar[i].date); 
+ 
+    printf("Enter activity description: "); 
+    scanf(" %[^\n]", buffer);   
+  calendar[i].activity = (char *)malloc(strlen(buffer) + 1);     strcpy(calendar[i].activity, buffer); 
+} 
+  
+} 
+void display(Day *calendar) { printf("\n--- Weekly Calendar ---\n"); for (int i = 0; i < SIZE; i++) { printf("\nDay: %s\n", calendar[i].dayName); printf("Date: %d\n", calendar[i].date); printf("Activity: %s\n", calendar[i].activity); } } void freeMemory(Day *calendar) { for (int i = 0; 
+i < SIZE; i++) { free(calendar[i].dayName);
+ free(calendar[i].activity); } free(calendar);
+ } int main() { Day *calendar = create(); read(calendar);
+ display(calendar); 
+freeMemory(calendar);
+ return 0; } 

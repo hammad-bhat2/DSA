@@ -1,0 +1,143 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 5
+
+int stack[MAX];
+int top = -1;
+
+// Stack operations
+void push(int element);
+int pop();
+void display();
+
+// Palindrome check
+int isPalindrome(char str[]);
+
+// Overflow and underflow demonstrations
+void checkOverflow();
+void checkUnderflow();
+
+void push(int element) {
+    if (top == MAX - 1)
+        printf("\nStack Overflow! Cannot push %d\n", element);
+    else {
+        stack[++top] = element;
+        printf("\n%d pushed onto stack.\n", element);
+    }
+}
+
+int pop() {
+    if (top == -1) {
+        printf("\nStack Underflow! Cannot pop.\n");
+        return -1;
+    } else {
+        int val = stack[top--];
+        printf("\n%d popped from stack.\n", val);
+        return val;
+    }
+}
+
+void display() {
+    if (top == -1)
+        printf("\nStack is empty.\n");
+    else {
+        printf("\nCurrent Stack:\n");
+        for (int i = top; i >= 0; i--)
+            printf("%d\n", stack[i]);
+    }
+}
+
+int isPalindrome(char str[]) {
+    int len = strlen(str);
+    char temp[MAX];
+    int i, tempTop = -1;
+
+    if (len > MAX) {
+        printf("\nInput too long for stack.\n");
+        return 0;
+    }
+
+    // Push all characters to temp stack
+    for (i = 0; i < len; i++)
+        temp[++tempTop] = str[i];
+
+    // Compare popped characters with original string
+    for (i = 0; i < len; i++)
+        if (temp[tempTop--] != str[i])
+            return 0;
+
+    return 1;
+}
+
+void checkOverflow() {
+    printf("\nDemonstrating Overflow:\n");
+    for (int i = 0; i <= MAX; i++)
+        push(i + 1);
+}
+
+void checkUnderflow() {
+    printf("\nDemonstrating Underflow:\n");
+    while (top >= -1)
+        pop();
+}
+
+int main() {
+    int choice, element;
+    char str[20];
+
+    while (1) {
+        printf("\n---- Stack Operations Menu ----\n");
+        printf("1. Push\n");
+        printf("2. Pop\n");
+        printf("3. Check Palindrome\n");
+        printf("4. Demonstrate Overflow\n");
+        printf("5. Demonstrate Underflow\n");
+        printf("6. Display Stack\n");
+        printf("7. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter element to push: ");
+                scanf("%d", &element);
+                push(element);
+                break;
+
+            case 2:
+                pop();
+                break;
+
+            case 3:
+                printf("Enter string to check palindrome: ");
+                scanf("%s", str);
+                if (isPalindrome(str))
+                    printf("\n%s is a palindrome.\n", str);
+                else
+                    printf("\n%s is not a palindrome.\n", str);
+                break;
+
+            case 4:
+                checkOverflow();
+                break;
+
+            case 5:
+                checkUnderflow();
+                break;
+
+            case 6:
+                display();
+                break;
+
+            case 7:
+                exit(0);
+
+            default:
+                printf("\nInvalid Choice!\n");
+        }
+    }
+
+    return 0;
+}

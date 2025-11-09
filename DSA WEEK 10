@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 10
+
+int adj[MAX][MAX];
+int visited[MAX];
+int n;
+
+void createGraph();
+void DFS(int v);
+void BFS(int start);
+
+int main() {
+    int choice, start;
+    printf("Enter number of cities (vertices): ");
+    scanf("%d", &n);
+    createGraph();
+
+    while (1) {
+        printf("\n\n---- GRAPH MENU ----");
+        printf("\n1. Display Adjacency Matrix");
+        printf("\n2. Depth First Search (DFS)");
+        printf("\n3. Breadth First Search (BFS)");
+        printf("\n4. Exit");
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("\nAdjacency Matrix:\n");
+                for (int i = 0; i < n; i++) {
+                    for (int j = 0; j < n; j++)
+                        printf("%d ", adj[i][j]);
+                    printf("\n");
+                }
+                break;
+            case 2:
+                for (int i = 0; i < n; i++) visited[i] = 0;
+                printf("\nEnter starting city (0 to %d): ", n-1);
+                scanf("%d", &start);
+                printf("Nodes reachable from city %d using DFS: ", start);
+                DFS(start);
+                break;
+            case 3:
+                for (int i = 0; i < n; i++) visited[i] = 0;
+                printf("\nEnter starting city (0 to %d): ", n-1);
+                scanf("%d", &start);
+                printf("Nodes reachable from city %d using BFS: ", start);
+                BFS(start);
+                break;
+            case 4:
+                exit(0);
+            default:
+                printf("\nInvalid Choice!");
+        }
+    }
+}
+
+void createGraph() {
+    int i, j;
+    printf("\nEnter adjacency matrix (0/1):\n");
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            scanf("%d", &adj[i][j]);
+        }
+    }
+}
+
+void DFS(int v) {
+    printf("%d ", v);
+    visited[v] = 1;
+    for (int i = 0; i < n; i++) {
+        if (adj[v][i] == 1 && visited[i] == 0)
+            DFS(i);
+    }
+}
+
+void BFS(int start) {
+    int queue[MAX], front = 0, rear = 0;
+    visited[start] = 1;
+    queue[rear++] = start;
+
+    while (front < rear) {
+        int v = queue[front++];
+        printf("%d ", v);
+
+        for (int i = 0; i < n; i++) {
+            if (adj[v][i] == 1 && visited[i] == 0) {
+                queue[rear++] = i;
+                visited[i] = 1;
+            }
+        }
+    }
+}
